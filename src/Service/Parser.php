@@ -12,7 +12,7 @@ class Parser
     private $cachePath;
     private $useCache = false;
     private $secondRequest = false;
-    private $delay = 30;
+    private $delay = 10;
     private $timeout = 15;
 
     public function getClient()

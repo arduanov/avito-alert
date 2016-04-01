@@ -65,7 +65,7 @@ class AppKernel extends Application
                 $app['monolog.config']['monolog.slack.key'],
                 '#general',
                 'Avito',
-                true,
+                false,
                 null,
                 \Monolog\Logger::INFO,
                 true,

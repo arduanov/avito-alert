@@ -45,7 +45,7 @@ class Avito
                 continue;
             }
             $message = [];
-            $message[] = '<b>' . $item['title'] . '</b>';
+            $message[] = '*' . $item['title'] . '*';
             $message[] = 'Цена: ' . number_format($item['price']);
             $message[] = $this->getItemDescription($item['link']);
             $message[] = $item['link'];
