@@ -28,7 +28,7 @@ class Avito
         $new = $this->getNewItems($data, $previousId);
 
 //        print_r($new);
-
+//        exit;
         $this->sendAlerts($new);
 
         if ($new) {
@@ -47,7 +47,7 @@ class Avito
             $message = [];
 
             $description = $this->getItemDescription($item['link']);
-            
+
             $message[] = '*' . $item['title'] . '*';
             $message[] = 'Цена: ' . number_format($item['price']);
             $message[] = $description['seller'];
@@ -69,8 +69,8 @@ class Avito
         $text = preg_replace("#\n+#", "\n", $text);
 
         $seller = trim($crawler->filterXPath('//div[@class="person-name"]')->text());
-        $seller = str_replace("\n",' ',$seller);
-        
+        $seller = str_replace("\n", ' ', $seller);
+
         return ['seller' => $seller, 'text' => $text];
     }
 
@@ -122,10 +122,14 @@ class Avito
 
     public function processArticle(Crawler $crawler)
     {
+        $price = $crawler->filterXPath('//div[@class="item-price "]');
+        if (!$price->count()) {
+            $price = $crawler->filterXPath('//div[@class="item-price price-discount"]');
+        }
         return [
             'id' => $crawler->attr('data-item-id'),
             'title' => $crawler->filterXPath('//span[@class="header-text"]')->text(),
-            'price' => preg_replace('#[\D]*#', '', $crawler->filterXPath('//div[@class="item-price "]')->text()),
+            'price' => $price->count() ? preg_replace('#[\D]*#', '', $price->text()) : '',
             'link' => 'https://m.avito.ru' . $crawler->filterXPath('//a[@class="item-link"]')->attr('href'),
         ];
     }
