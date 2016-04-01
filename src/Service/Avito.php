@@ -15,7 +15,7 @@ class Avito
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->app['parser']->useCache(true);
+//        $this->app['parser']->useCache(true);
 
     }
 
