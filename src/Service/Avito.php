@@ -47,6 +47,7 @@ class Avito
             $message = [];
             $message[] = '*' . $item['title'] . '*';
             $message[] = 'Цена: ' . number_format($item['price']);
+            $message[] = $item['seller'];
             $message[] = $this->getItemDescription($item['link']);
             $message[] = $item['link'];
 
@@ -119,6 +120,7 @@ class Avito
             'title' => $crawler->filterXPath('//span[@class="header-text"]')->text(),
             'price' => preg_replace('#[\D]*#', '', $crawler->filterXPath('//div[@class="item-price "]')->text()),
             'link' => 'https://m.avito.ru' . $crawler->filterXPath('//a[@class="item-link"]')->attr('href'),
+            'seller' => trim($crawler->filterXPath('//div[@class="person-name"]')->text()),
         ];
     }
 
