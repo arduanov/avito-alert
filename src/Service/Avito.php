@@ -15,7 +15,7 @@ class Avito
     public function __construct(Application $app)
     {
         $this->app = $app;
-//        $this->app['parser']->useCache(true);
+        $this->app['parser']->useCache(true);
 
     }
 
@@ -45,10 +45,13 @@ class Avito
                 continue;
             }
             $message = [];
+
+            $description = $this->getItemDescription($item['link']);
+            
             $message[] = '*' . $item['title'] . '*';
             $message[] = 'Цена: ' . number_format($item['price']);
-            $message[] = $item['seller'];
-            $message[] = $this->getItemDescription($item['link']);
+            $message[] = $description['seller'];
+            $message[] = $description['text'];
             $message[] = $item['link'];
 
             $message = implode("\n", $message);
@@ -64,7 +67,11 @@ class Avito
         $text = trim($crawler->filterXPath('//div[@id="description"]//div[@class="description-preview-wrapper"]')->html());
         $text = str_replace(['<br>', '<p>', '</p>'], "\n", $text);
         $text = preg_replace("#\n+#", "\n", $text);
-        return $text;
+
+        $seller = trim($crawler->filterXPath('//div[@class="person-name"]')->text());
+        $seller = str_replace("\n",' ',$seller);
+        
+        return ['seller' => $seller, 'text' => $text];
     }
 
     public function getNewItems($data, $previousId)
@@ -120,7 +127,6 @@ class Avito
             'title' => $crawler->filterXPath('//span[@class="header-text"]')->text(),
             'price' => preg_replace('#[\D]*#', '', $crawler->filterXPath('//div[@class="item-price "]')->text()),
             'link' => 'https://m.avito.ru' . $crawler->filterXPath('//a[@class="item-link"]')->attr('href'),
-            'seller' => trim($crawler->filterXPath('//div[@class="person-name"]')->text()),
         ];
     }
 
