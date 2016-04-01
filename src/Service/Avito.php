@@ -64,7 +64,7 @@ class Avito
     public function getItemDescription($url)
     {
         $crawler = $this->app['parser']->get($url);
-        $text = trim($crawler->filterXPath('//div[@id="description"]//div[@class="description-preview-wrapper"]')->html());
+        $text = trim($crawler->filterXPath('//div[@id="description"]/div/div')->html());
         $text = str_replace(['<br>', '<p>', '</p>'], "\n", $text);
         $text = preg_replace("#\n+#", "\n", $text);
 

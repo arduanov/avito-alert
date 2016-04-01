@@ -73,6 +73,7 @@ class Parser
 
     public function get($url, $useCache = true)
     {
+//        var_dump($url);
 
         if (!$url) {
             throw  new \Exception('Url is empty');
@@ -84,7 +85,6 @@ class Parser
         if ($this->secondRequest) {
             $this->sleep();
         }
-//        var_dump($url);
         $crawler = $this->client->request('GET', $url, ['connect_timeout' => $this->timeout, 'timeout' => $this->timeout]);
 
         $html = null;

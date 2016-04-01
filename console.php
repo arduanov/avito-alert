@@ -6,6 +6,7 @@ set_time_limit(0);
 use Symfony\Component\Console\Application as Console;
 
 $console = new Console();
+$console->setCatchExceptions(false);
 
 $console->addCommands([
     new App\Command\WorkerCommand($app),

@@ -7,7 +7,6 @@ use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Monolog\Logger;
 
 class AppKernel extends Application
 {
@@ -50,15 +49,15 @@ class AppKernel extends Application
             return $log;
         });
 
-        $app['logger'] = $app->share(
-            $app->extend(
-                'logger',
-                function (Logger $logger, \Pimple $app) {
-                    $logger->pushHandler($app['monolog.handler.slack']);
-                    return $logger;
-                }
-            )
-        );
+//        $app['logger'] = $app->share(
+//            $app->extend(
+//                'logger',
+//                function (Logger $logger, \Pimple $app) {
+//                    $logger->pushHandler($app['monolog.handler.slack']);
+//                    return $logger;
+//                }
+//            )
+//        );
 
         $app['monolog.slack.alert'] = $app->share(function () use ($app) {
             return new \Monolog\Handler\SlackHandler(
@@ -116,7 +115,6 @@ class AppKernel extends Application
     {
         $errorHandler = ErrorHandler::register();
 
-//        if (php_sapi_name() !== 'cli') {
         $app->error(function (HttpException $e) use ($app) {
             $errCode = $e->getStatusCode();
             $data = [
@@ -133,7 +131,6 @@ class AppKernel extends Application
         $app->error(function (\Exception $e) use ($app) {
             throw $e;
         });
-
         $errorHandler->setExceptionHandler(function (\Exception $e) use ($app) {
             $data = [
                 $e->getMessage(),
@@ -142,6 +139,12 @@ class AppKernel extends Application
                 $e->getTraceAsString(),
             ];
             $app['logger']->critical(implode("\n", $data));
+
+            if (php_sapi_name() === 'cli') {
+
+                echo $e;
+            }
+
         });
 //        }
 
