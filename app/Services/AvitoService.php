@@ -90,7 +90,7 @@ class AvitoService
 
     public function parseItemsList(Crawler $crawler)
     {
-        $crawler->filterXPath('//article[@data-item-premium="0"]')->each(function ($crawler) use (&$data) {
+        $crawler->filterXPath('//section/article[@data-item-premium="0"]')->each(function ($crawler) use (&$data) {
             $element = $this->parseItemsElement($crawler);
             $data[$element['id']] = $element;
         });

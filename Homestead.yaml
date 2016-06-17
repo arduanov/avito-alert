@@ -19,7 +19,7 @@ folders:
 sites:
     - map: homestead.app
       to: "/home/vagrant/blog/public"
-#      schedule: true
+      schedule: true
 
 
 databases:

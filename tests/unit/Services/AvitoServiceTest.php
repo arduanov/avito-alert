@@ -47,7 +47,8 @@ class AvitoServiceTest extends PHPUnit_Framework_TestCase
 
         $avito = new AvitoService($this->client);
         $result = $avito->parseItemsList($crawler);
-
+        
+        $this->assertCount(19, $result);
         $this->assertTrue(is_array($result) && $result, 'Result not empty');
         $this->assertSame(['id', 'title', 'price', 'link'], array_keys(array_shift($result)));
     }
@@ -61,6 +62,6 @@ class AvitoServiceTest extends PHPUnit_Framework_TestCase
         $result = $avito->parseItemContent($crawler);
 
         $this->assertTrue(is_array($result) && $result, 'Result not empty');
-        $this->assertSame(['seller', 'text'], array_keys($result));
+        $this->assertSame(['seller', 'text', 'image'], array_keys($result));
     }
 }
